@@ -1,0 +1,48 @@
+# Distrobox declarative configuration
+# Usage: distrobox-assemble create --file distrobox-assemble.yaml
+
+devenv:
+  # Use our custom-built image
+  image: localhost/devenv-arch:latest
+  
+  # Pull policy (never = use local only, since we build it)
+  pull: false
+  
+  # Replace existing container if it exists
+  replace: true
+  
+  # Start container after creation
+  start_now: true
+  
+  # Run init system inside container
+  init: false
+  
+  # Additional packages to install on creation (via pacman)
+  # Keep minimal - prefer Devbox for dev tools
+  additional_packages:
+    - fish  # Default shell - bash execs into fish automatically
+  
+  # Custom home directory (optional - defaults to host $HOME)
+  # home: /home/myuser
+  
+  # Additional volumes to mount
+  # volume:
+  #   - /path/on/host:/path/in/container:rw
+  
+  # Environment variables
+  # exported_vars:
+  #   - VAR_NAME=value
+  
+  # Init hooks - run commands on container start
+  init_hooks:
+    # Ensure devbox is initialized on first shell
+    - echo 'eval "$(devbox global shellenv)"' >> /etc/profile.d/devbox.sh
+  
+  # Pre-init hooks - run before init
+  pre_init_hooks:
+    - |
+      # Install Devbox if not present
+      if ! command -v devbox &> /dev/null; then
+        echo "Installing Devbox..."
+        curl -fsSL https://get.jetify.com/devbox | bash -s -- -f
+      fi

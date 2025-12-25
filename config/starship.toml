@@ -1,0 +1,137 @@
+# Starship prompt configuration - Monokai Pro Theme
+# Copy to ~/.config/starship.toml or symlink
+#
+# Monokai Pro Palette:
+#   Background: #2d2a2e    Foreground: #fcfcfa
+#   Red:        #ff6188    Orange:     #fc9867
+#   Yellow:     #ffd866    Green:      #a9dc76
+#   Blue:       #78dce8    Purple:     #ab9df2
+#   Gray:       #727072
+
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$kubernetes\
+$terraform\
+$golang\
+$python\
+$nodejs\
+$rust\
+$cmd_duration\
+$line_break\
+$character"""
+
+# Timeout for commands (ms)
+command_timeout = 1000
+
+[character]
+success_symbol = "[❯](#a9dc76)"
+error_symbol = "[❯](#ff6188)"
+
+[directory]
+truncation_length = 4
+truncate_to_repo = true
+style = "#78dce8 bold"
+read_only = " 󰌾"
+read_only_style = "#ff6188"
+
+[git_branch]
+format = "[$symbol$branch]($style) "
+symbol = " "
+style = "#ab9df2 bold"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "#ff6188 bold"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+conflicted = "="
+untracked = "?"
+stashed = "$"
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"
+
+[kubernetes]
+disabled = false
+format = '[$symbol$context( \($namespace\))]($style) '
+symbol = "☸ "
+style = "#78dce8 bold"
+detect_files = []
+detect_folders = []
+detect_env_vars = ["KUBECONFIG"]
+detect_extensions = []
+
+[terraform]
+disabled = false
+format = '[$symbol$workspace]($style) '
+symbol = "󱁢 "
+style = "#ab9df2 bold"
+
+[golang]
+format = '[$symbol($version )]($style)'
+symbol = " "
+style = "#78dce8"
+
+[python]
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+symbol = " "
+style = "#ffd866"
+
+[nodejs]
+format = '[$symbol($version )]($style)'
+symbol = " "
+style = "#a9dc76"
+
+[rust]
+format = '[$symbol($version )]($style)'
+symbol = " "
+style = "#fc9867"
+
+[cmd_duration]
+min_time = 2000
+format = "[$duration]($style) "
+style = "#ffd866"
+
+[hostname]
+ssh_only = true
+format = "[@$hostname]($style) "
+style = "#a9dc76 bold"
+
+[username]
+show_always = false
+format = "[$user]($style)"
+style_user = "#a9dc76 bold"
+style_root = "#ff6188 bold"
+
+# Additional modules for GitOps workflow
+
+[docker_context]
+disabled = false
+format = "[$symbol$context]($style) "
+symbol = " "
+style = "#78dce8"
+only_with_files = true
+
+[gcloud]
+disabled = false
+format = '[$symbol$account(@$domain)(\($project\))]($style) '
+symbol = "󱇶 "
+style = "#78dce8"
+
+[aws]
+disabled = false
+format = '[$symbol($profile )(\($region\) )]($style)'
+symbol = " "
+style = "#fc9867"
+
+[azure]
+disabled = false
+format = '[$symbol($subscription)]($style) '
+symbol = " "
+style = "#78dce8"
