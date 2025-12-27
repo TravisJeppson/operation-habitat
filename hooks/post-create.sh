@@ -83,11 +83,28 @@ AUR_PACKAGES=(
 echo "Installing packages from official repos..."
 sudo pacman -Sy --noconfirm --needed "${PACMAN_PACKAGES[@]}" || true
 
+# ----------------------------
+# Install yay if not present (needed for AUR)
+# ----------------------------
+
+if ! command -v yay &> /dev/null; then
+    echo "Installing yay..."
+    sudo pacman -S --noconfirm --needed git base-devel
+    TEMP_DIR=$(mktemp -d)
+    git clone https://aur.archlinux.org/yay-bin.git "$TEMP_DIR/yay-bin"
+    cd "$TEMP_DIR/yay-bin"
+    makepkg -si --noconfirm
+    cd "$SCRIPT_DIR"
+    rm -rf "$TEMP_DIR"
+    echo "  → yay installed"
+fi
+
+# Install AUR packages
 echo "Installing packages from AUR..."
 if command -v yay &> /dev/null; then
     yay -S --noconfirm --needed "${AUR_PACKAGES[@]}" || true
 else
-    echo "  ⚠ yay not found, skipping AUR packages"
+    echo "  ⚠ yay installation failed, skipping AUR packages"
 fi
 
 # ----------------------------
@@ -96,7 +113,7 @@ fi
 
 echo "Installing Claude Code..."
 if command -v npm &> /dev/null; then
-    npm install -g @anthropic-ai/claude-code
+    sudo npm install -g @anthropic-ai/claude-code
     echo "  → Claude Code installed"
 else
     echo "  ⚠ npm not found, skipping Claude Code installation"
