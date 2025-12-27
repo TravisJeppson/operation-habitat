@@ -1,0 +1,79 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/main/.schema/devbox.schema.json",
+  "packages": [
+    "kubectl@latest",
+    "kubectx@latest",
+    "kubernetes-helm@latest",
+    "kustomize@latest",
+    "k9s@latest",
+    "opentofu@latest",
+    "terragrunt@latest",
+    "neovim@latest",
+    "git@latest",
+    "gh@latest",
+    "starship@latest",
+    "tmux@latest",
+    "ripgrep@latest",
+    "fd@latest",
+    "fzf@latest",
+    "bat@latest",
+    "eza@latest",
+    "jq@latest",
+    "yq-go@latest",
+    "lazygit@latest",
+    "delta@latest",
+    "zoxide@latest",
+    "direnv@latest",
+    "nodejs@latest",
+    "argocd@latest",
+    "kargo@latest",
+    "stern@latest",
+    "kubeconform@latest",
+    "krew@latest",
+    "sops@latest",
+    "age@latest",
+    "bitwarden-cli@latest",
+    "google-cloud-sdk@latest",
+    "mongosh@latest",
+    "pgcli@latest",
+    "httpie@latest",
+    "dive@latest",
+    "trivy@latest"
+  ],
+  "shell": {
+    "init_hook": [
+      "# Initialize starship prompt",
+      "eval \"$(starship init bash)\"",
+      "",
+      "# Initialize zoxide",
+      "eval \"$(zoxide init bash)\"",
+      "",
+      "# Initialize direnv",
+      "eval \"$(direnv hook bash)\"",
+      "",
+      "# Aliases",
+      "alias k='kubectl'",
+      "alias kx='kubectx'",
+      "alias kn='kubens'",
+      "alias tf='tofu'",
+      "alias vim='nvim'",
+      "alias ls='eza'",
+      "alias ll='eza -la'",
+      "alias cat='bat --paging=never'",
+      "alias lg='lazygit'",
+      "",
+      "echo '🚀 Development environment ready'"
+    ],
+    "scripts": {
+      "update": [
+        "devbox update"
+      ],
+      "clean": [
+        "devbox gc"
+      ]
+    }
+  },
+  "nixpkgs": {
+    "commit": "nixos-unstable"
+  }
+}
