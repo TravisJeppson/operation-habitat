@@ -72,8 +72,5 @@
         "devbox gc"
       ]
     }
-  },
-  "nixpkgs": {
-    "commit": "nixos-unstable"
   }
 }
