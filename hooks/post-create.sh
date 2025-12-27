@@ -30,11 +30,27 @@ fi
 # Ensure nix/devbox paths are available
 export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
 
+# Source nix profile if it exists (needed after fresh nix install)
+if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
+    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+fi
+
 # Install devbox global packages (needed for npm)
 echo "Installing devbox packages..."
 if [[ -f "$SCRIPT_DIR/devbox.json" ]]; then
     cd "$SCRIPT_DIR"
-    devbox install
+
+    # Run devbox install - this may install Nix first
+    devbox install || true
+
+    # If Nix was just installed, source its profile and retry
+    if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+        # Wait a moment for nix daemon to be ready
+        sleep 2
+        # Retry installation
+        devbox install
+    fi
 
     # Add packages globally
     PACKAGES=$(jq -r '.packages[]' devbox.json | tr '\n' ' ')
