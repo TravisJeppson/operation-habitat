@@ -50,9 +50,7 @@ alias tga 'terragrunt run-all apply'
 alias tgp 'terragrunt run-all plan'
 alias tgi 'terragrunt run-all init'
 
-# Cloud CLIs
-alias az 'azure-cli'
-alias gcloud 'gcloud'
+# Cloud CLIs (az and gcloud are already the correct command names)
 
 # Development
 alias vim 'nvim'

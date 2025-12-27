@@ -58,7 +58,7 @@ AUR_PACKAGES=(
     krew
 
     # Infrastructure
-    opentofu-bin
+    opentofu
     terragrunt
 
     # Cloud CLIs
