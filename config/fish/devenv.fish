@@ -43,9 +43,6 @@ alias tf 'tofu'
 alias tfi 'tofu init'
 alias tfp 'tofu plan'
 alias tfa 'tofu apply'
-alias tg 'terragrunt'
-alias tga 'terragrunt run-all apply'
-alias tgp 'terragrunt run-all plan'
 
 # Development
 alias vim 'nvim'
@@ -82,17 +79,11 @@ alias dc 'docker compose'
 alias p 'podman'
 alias pc 'podman-compose'
 
-# Cloud
-alias gcloud 'gcloud'
-alias gcl 'gcloud'
-
 # Databases
-alias mongo 'mongosh'
 alias pg 'pgcli'
 
 # Misc
 alias http 'httpie'
-alias bw 'bw'
 alias h 'http'
 alias please 'sudo'
 
@@ -115,11 +106,6 @@ if type -q argocd
     argocd completion fish | source
 end
 
-# kargo completion
-if type -q kargo
-    kargo completion fish 2>/dev/null | source
-end
-
 # opentofu completion
 if type -q tofu
     tofu -install-autocomplete 2>/dev/null
@@ -128,14 +114,6 @@ end
 # gh completion
 if type -q gh
     gh completion -s fish | source
-end
-
-# gcloud completion
-if type -q gcloud
-    # gcloud fish completion is typically in the SDK
-    if test -f /usr/share/google-cloud-sdk/completion.fish.inc
-        source /usr/share/google-cloud-sdk/completion.fish.inc
-    end
 end
 
 # Claude Code completion (only if logged in)

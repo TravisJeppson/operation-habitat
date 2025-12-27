@@ -17,10 +17,6 @@ start_now=true
 # Run init system inside container
 init=false
 
-# Additional packages to install on creation (via pacman)
-# Keep minimal - prefer Devbox for dev tools
-additional_packages=fish
-
 # Custom home directory (optional - defaults to host $HOME)
 # home=/home/myuser
 

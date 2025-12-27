@@ -155,8 +155,8 @@ fi
 # Fish config
 FISH_CONFIG_DIR="$CONFIG_DIR/fish/conf.d"
 mkdir -p "$FISH_CONFIG_DIR"
-if [[ -f "$SCRIPT_DIR/config/fish/devbox.fish" ]]; then
-    ln -sf "$SCRIPT_DIR/config/fish/devbox.fish" "$FISH_CONFIG_DIR/devbox.fish"
+if [[ -f "$SCRIPT_DIR/config/fish/devenv.fish" ]]; then
+    ln -sf "$SCRIPT_DIR/config/fish/devenv.fish" "$FISH_CONFIG_DIR/devenv.fish"
     echo "  → Linked fish config"
 fi
 
