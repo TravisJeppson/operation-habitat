@@ -68,9 +68,6 @@ AUR_PACKAGES=(
     yq
     pgcli
 
-    # Security
-    bitwarden-cli
-
     # Container tools
     dive
     trivy
