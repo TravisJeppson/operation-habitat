@@ -15,9 +15,15 @@ if ! command -v devbox &> /dev/null; then
     echo "  → Devbox installed"
 fi
 
-# Set up devbox shell environment in profile
+# Set up devbox shell environment in profile (with guards to prevent errors during init)
 if [[ ! -f /etc/profile.d/devbox.sh ]]; then
-    echo 'eval "$(devbox global shellenv)"' | sudo tee /etc/profile.d/devbox.sh > /dev/null
+    sudo tee /etc/profile.d/devbox.sh > /dev/null << 'DEVBOX_PROFILE'
+# Devbox global shell environment
+# Only run if devbox is installed and initialized
+if command -v devbox &> /dev/null && [[ -d "$HOME/.local/share/devbox/global" ]]; then
+    eval "$(devbox global shellenv 2>/dev/null)" || true
+fi
+DEVBOX_PROFILE
     echo "  → Added devbox to /etc/profile.d/"
 fi
 
@@ -39,7 +45,7 @@ if [[ -f "$SCRIPT_DIR/devbox.json" ]]; then
 fi
 
 # Source devbox environment for npm access
-eval "$(devbox global shellenv)"
+eval "$(devbox global shellenv 2>/dev/null)" || true
 
 # Install Claude Code
 echo "Installing Claude Code..."
