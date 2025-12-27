@@ -138,9 +138,12 @@ if type -q gcloud
     end
 end
 
-# Claude Code completion
+# Claude Code completion (only if logged in)
 if type -q claude
-    claude completion fish 2>/dev/null | source
+    set -l claude_comp (claude completion fish 2>/dev/null)
+    if test $status -eq 0; and not string match -q '*Invalid*' -- "$claude_comp"
+        echo $claude_comp | source
+    end
 end
 
 # ----------------------------

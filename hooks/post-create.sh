@@ -55,7 +55,7 @@ AUR_PACKAGES=(
     argocd
     stern
     kubeconform
-    krew-bin
+    krew
 
     # Infrastructure
     opentofu-bin
@@ -68,9 +68,6 @@ AUR_PACKAGES=(
     yq
     mongosh-bin
     pgcli
-
-    # Cloud providers
-    google-cloud-cli
 
     # Security
     bitwarden-cli
