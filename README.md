@@ -197,20 +197,6 @@ curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sudo
 distrobox enter devenv
 ```
 
-### Tmux Key Bindings
-
-Prefix is `Ctrl-a` (not default `Ctrl-b`):
-
-|Key               |Action          |
-|——————|-—————|
-|`Ctrl-a |`        |Split vertical  |
-|`Ctrl-a -`        |Split horizontal|
-|`Ctrl-a h/j/k/l`  |Navigate panes  |
-|`Ctrl-a H/J/K/L`  |Resize panes    |
-|`Alt-1` to `Alt-9`|Switch windows  |
-|`Ctrl-a r`        |Reload config   |
-|`Ctrl-a S`        |New session     |
-
 ### Exporting apps to host
 
 ```bash
