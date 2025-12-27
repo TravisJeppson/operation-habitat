@@ -66,7 +66,6 @@ AUR_PACKAGES=(
 
     # Data tools
     yq
-    mongosh-bin
     pgcli
 
     # Security
