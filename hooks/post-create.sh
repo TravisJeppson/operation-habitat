@@ -30,6 +30,28 @@ fi
 # Ensure nix/devbox paths are available
 export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
 
+# Function to ensure nix daemon is running (needed in containers without systemd)
+start_nix_daemon() {
+    if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+    fi
+
+    # Check if daemon socket exists
+    if [[ ! -S /nix/var/nix/daemon-socket/socket ]]; then
+        echo "  → Starting Nix daemon..."
+        # Start nix daemon in background
+        sudo /nix/var/nix/profiles/default/bin/nix daemon &
+        # Wait for socket to appear
+        for i in {1..10}; do
+            if [[ -S /nix/var/nix/daemon-socket/socket ]]; then
+                echo "  → Nix daemon ready"
+                break
+            fi
+            sleep 1
+        done
+    fi
+}
+
 # Source nix profile if it exists (needed after fresh nix install)
 if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
     . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
@@ -43,11 +65,9 @@ if [[ -f "$SCRIPT_DIR/devbox.json" ]]; then
     # Run devbox install - this may install Nix first
     devbox install || true
 
-    # If Nix was just installed, source its profile and retry
-    if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
-        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-        # Wait a moment for nix daemon to be ready
-        sleep 2
+    # If Nix was just installed, start daemon and retry
+    if [[ -f /nix/var/nix/profiles/default/bin/nix ]]; then
+        start_nix_daemon
         # Retry installation
         devbox install
     fi
