@@ -7,7 +7,6 @@
     "kustomize@latest",
     "k9s@latest",
     "opentofu@latest",
-    "terragrunt@latest",
     "neovim@latest",
     "git@latest",
     "gh@latest",
