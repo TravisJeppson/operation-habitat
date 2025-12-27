@@ -8,7 +8,26 @@ echo "🔧 Running post-create hooks..."
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Install devbox global packages first (needed for npm)
+# Install Devbox if not present
+if ! command -v devbox &> /dev/null; then
+    echo "Installing Devbox..."
+    curl -fsSL https://get.jetify.com/devbox | bash -s -- -f
+    echo "  → Devbox installed"
+fi
+
+# Set up devbox shell environment in profile
+if [[ ! -f /etc/profile.d/devbox.sh ]]; then
+    echo 'eval "$(devbox global shellenv)"' | sudo tee /etc/profile.d/devbox.sh > /dev/null
+    echo "  → Added devbox to /etc/profile.d/"
+fi
+
+# Source devbox for current session
+export PATH="$HOME/.nix-profile/bin:$PATH"
+if command -v devbox &> /dev/null; then
+    eval "$(devbox global shellenv)" 2>/dev/null || true
+fi
+
+# Install devbox global packages (needed for npm)
 echo "Installing devbox packages..."
 if [[ -f "$SCRIPT_DIR/devbox.json" ]]; then
     cd "$SCRIPT_DIR"

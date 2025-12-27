@@ -30,8 +30,5 @@ additional_packages=fish
 # Environment variables
 # exported_vars=VAR_NAME=value
 
-# Init hooks - run commands on container start
-init_hooks=echo 'eval "$(devbox global shellenv)"' >> /etc/profile.d/devbox.sh
-
-# Pre-init hooks - run before init (install Devbox if not present)
-pre_init_hooks=command -v devbox &> /dev/null || (echo "Installing Devbox..." && curl -fsSL https://get.jetify.com/devbox | bash -s -- -f)
+# Note: Complex init hooks are handled in hooks/post-create.sh
+# distrobox-assemble INI format doesn't support special shell characters well
