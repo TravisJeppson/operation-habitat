@@ -1,9 +1,9 @@
 # Fish shell configuration for devbox integration
 # Source this from your ~/.config/fish/config.fish or place it in conf.d/
 
-# Initialize devbox global environment
-if type -q devbox
-    eval (devbox global shellenv --init-hook)
+# Initialize devbox global environment (only if properly initialized)
+if type -q devbox; and test -d "$HOME/.local/share/devbox/global"
+    devbox global shellenv --init-hook 2>/dev/null | source
 end
 
 # Initialize starship prompt
