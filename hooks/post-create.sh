@@ -27,25 +27,24 @@ DEVBOX_PROFILE
     echo "  → Added devbox to /etc/profile.d/"
 fi
 
-# Source devbox for current session
-export PATH="$HOME/.nix-profile/bin:$PATH"
-if command -v devbox &> /dev/null; then
-    eval "$(devbox global shellenv)" 2>/dev/null || true
-fi
+# Ensure nix/devbox paths are available
+export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
 
 # Install devbox global packages (needed for npm)
 echo "Installing devbox packages..."
 if [[ -f "$SCRIPT_DIR/devbox.json" ]]; then
     cd "$SCRIPT_DIR"
     devbox install
-    
+
     # Add packages globally
     PACKAGES=$(jq -r '.packages[]' devbox.json | tr '\n' ' ')
     devbox global add $PACKAGES
 fi
 
-# Source devbox environment for npm access
-eval "$(devbox global shellenv 2>/dev/null)" || true
+# NOW source devbox environment (after global packages are installed)
+if command -v devbox &> /dev/null && [[ -d "$HOME/.local/share/devbox/global/default" ]]; then
+    eval "$(devbox global shellenv 2>/dev/null)" || true
+fi
 
 # Install Claude Code
 echo "Installing Claude Code..."
