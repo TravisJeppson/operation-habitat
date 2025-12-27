@@ -38,11 +38,21 @@ alias argo 'argocd'
 alias argoapp 'argocd app'
 alias argosync 'argocd app sync'
 
-# Infrastructure
+# Infrastructure - OpenTofu
 alias tf 'tofu'
 alias tfi 'tofu init'
 alias tfp 'tofu plan'
 alias tfa 'tofu apply'
+
+# Infrastructure - Terragrunt
+alias tg 'terragrunt'
+alias tga 'terragrunt run-all apply'
+alias tgp 'terragrunt run-all plan'
+alias tgi 'terragrunt run-all init'
+
+# Cloud CLIs
+alias az 'azure-cli'
+alias gcloud 'gcloud'
 
 # Development
 alias vim 'nvim'
@@ -123,6 +133,18 @@ if type -q claude
         echo $claude_comp | source
     end
 end
+
+# terragrunt completion
+if type -q terragrunt
+    terragrunt --install-autocomplete 2>/dev/null
+end
+
+# azure-cli completion
+if type -q az
+    az completion --shell fish 2>/dev/null | source
+end
+
+# gcloud completion (handled by google-cloud-cli package)
 
 # ----------------------------
 # Environment

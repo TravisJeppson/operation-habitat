@@ -37,8 +37,8 @@ PACMAN_PACKAGES=(
     age
     sops
 
-    # Development
-    nodejs
+    # Development (using LTS for compatibility with cloud CLIs)
+    nodejs-lts-jod
     npm
 
     # Kubernetes (official)
@@ -59,6 +59,11 @@ AUR_PACKAGES=(
 
     # Infrastructure
     opentofu-bin
+    terragrunt
+
+    # Cloud CLIs
+    azure-cli
+    google-cloud-cli
 
     # Git & GitHub
     github-cli
