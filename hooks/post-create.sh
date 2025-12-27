@@ -41,9 +41,10 @@ if [[ -f "$SCRIPT_DIR/devbox.json" ]]; then
     devbox global add $PACKAGES
 fi
 
-# NOW source devbox environment (after global packages are installed)
+# Source devbox environment for npm access (filter to only export lines)
 if command -v devbox &> /dev/null && [[ -d "$HOME/.local/share/devbox/global/default" ]]; then
-    eval "$(devbox global shellenv 2>/dev/null)" || true
+    # Only eval lines that start with 'export ' to avoid executing stray output
+    eval "$(devbox global shellenv 2>/dev/null | grep '^export ')" || true
 fi
 
 # Install Claude Code
