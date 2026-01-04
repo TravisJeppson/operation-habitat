@@ -7,7 +7,7 @@ A portable, reproducible development environment using distrobox + Devbox.
 This environment separates concerns into layers:
 
 |Layer    |Tool            |Purpose                             |
-|———|-—————|————————————|
+|---------|----------------|-----------------------------------|
 |Host     |Any Linux / WSL2|Just needs podman/docker + distrobox|
 |Container|Arch Linux      |System packages, stable base        |
 |Dev Tools|Devbox (Nix)    |Reproducible, declarative toolchain |
@@ -16,8 +16,8 @@ This environment separates concerns into layers:
 
 ```bash
 # Clone to your preferred location
-git clone <this-repo> ~/.config/devenv
-cd ~/.config/devenv
+git clone <this-repo> ~/.config/ophab
+cd ~/.config/ophab
 
 # Build and enter the environment
 ./bootstrap.sh
@@ -76,7 +76,7 @@ cd ~/.config/devenv
 All configs use the **Monokai Pro** color palette:
 
 |Color |Hex      |Usage                 |
-|——|———|-———————|
+|------|---------|----------------------|
 |Red   |`#ff6188`|Errors, deletions     |
 |Orange|`#fc9867`|Warnings, Rust        |
 |Yellow|`#ffd866`|Modified, Python      |
@@ -165,7 +165,7 @@ curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sudo
 ### Key Aliases
 
 |Alias      |Command         |Category|
-|————|-—————|———|
+|-----------|----------------|--------|
 |`k`        |kubectl         |k8s     |
 |`kx` / `kn`|kubectx / kubens|k8s     |
 |`kgp`      |kubectl get pods|k8s     |
@@ -182,7 +182,7 @@ curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sudo
 ### Fish Functions
 
 |Function            |Description         |
-|———————|———————|
+|--------------------|---------------------|
 |`ksh <pod>`         |Shell into pod      |
 |`kbash <pod>`       |Bash into pod       |
 |`kwatch <resource>` |Watch k8s resources |
@@ -194,7 +194,7 @@ curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sudo
 ### Entering the environment
 
 ```bash
-distrobox enter devenv
+distrobox enter ophab
 ```
 
 ### Exporting apps to host

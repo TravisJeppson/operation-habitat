@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Bootstrap script for devenv
+# Bootstrap script for ophab
 # Usage: ./bootstrap.sh [--rebuild] [--enter]
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-IMAGE_NAME="devenv-arch"
-CONTAINER_NAME="devenv"
+IMAGE_NAME="ophab-arch"
+CONTAINER_NAME="ophab"
 
 # Colors
 RED='\033[0;31m'

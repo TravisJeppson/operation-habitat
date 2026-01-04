@@ -1,4 +1,4 @@
-# Fish shell configuration for devenv container
+# Fish shell configuration for ophab container
 # Source this from your ~/.config/fish/config.fish or place it in conf.d/
 
 # Initialize starship prompt

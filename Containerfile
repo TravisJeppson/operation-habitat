@@ -41,6 +41,6 @@ RUN touch /etc/container-release
 
 # Labels for identification
 LABEL com.github.containers.toolbox="true" \
-      name="devenv-arch" \
+      name="ophab-arch" \
       version="1.0" \
       description="Arch Linux development environment for distrobox"

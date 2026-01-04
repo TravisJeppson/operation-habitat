@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Post-creation hook for devenv container
+# Post-creation hook for ophab container
 # This runs after the container is created
 
 set -euo pipefail
@@ -160,8 +160,8 @@ fi
 # Fish config
 FISH_CONFIG_DIR="$CONFIG_DIR/fish/conf.d"
 mkdir -p "$FISH_CONFIG_DIR"
-if [[ -f "$SCRIPT_DIR/config/fish/devenv.fish" ]]; then
-    ln -sf "$SCRIPT_DIR/config/fish/devenv.fish" "$FISH_CONFIG_DIR/devenv.fish"
+if [[ -f "$SCRIPT_DIR/config/fish/ophab.fish" ]]; then
+    ln -sf "$SCRIPT_DIR/config/fish/ophab.fish" "$FISH_CONFIG_DIR/ophab.fish"
     echo "  → Linked fish config"
 fi
 
@@ -200,4 +200,4 @@ command -v k9s &>/dev/null && echo "  → k9s"
 command -v nvim &>/dev/null && echo "  → Neovim"
 echo ""
 echo "To enter the environment:"
-echo "   distrobox enter devenv"
+echo "   distrobox enter ophab"

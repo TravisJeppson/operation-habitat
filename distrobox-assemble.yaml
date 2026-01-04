@@ -1,9 +1,9 @@
 # Distrobox declarative configuration
 # Usage: distrobox-assemble create --file distrobox-assemble.yaml
 
-[devenv]
+[ophab]
 # Use our custom-built image
-image=localhost/devenv-arch:latest
+image=localhost/ophab-arch:latest
 
 # Pull policy (never = use local only, since we build it)
 pull=false
