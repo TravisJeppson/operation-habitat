@@ -158,8 +158,8 @@ main() {
     echo "To enter the environment:"
     echo "  distrobox enter $CONTAINER_NAME"
     echo ""
-    echo "To export tools to host:"
-    echo "  distrobox enter $CONTAINER_NAME -- devbox global shellenv"
+    echo "To run post-create hooks again:"
+    echo "  distrobox enter $CONTAINER_NAME -- bash hooks/post-create.sh"
     echo ""
 
     # Enter if requested

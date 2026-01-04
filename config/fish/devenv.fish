@@ -1,10 +1,5 @@
-# Fish shell configuration for devbox integration
+# Fish shell configuration for devenv container
 # Source this from your ~/.config/fish/config.fish or place it in conf.d/
-
-# Initialize devbox global environment
-if type -q devbox
-    eval (devbox global shellenv --init-hook)
-end
 
 # Initialize starship prompt
 if type -q starship
@@ -43,14 +38,19 @@ alias argo 'argocd'
 alias argoapp 'argocd app'
 alias argosync 'argocd app sync'
 
-# Infrastructure
+# Infrastructure - OpenTofu
 alias tf 'tofu'
 alias tfi 'tofu init'
 alias tfp 'tofu plan'
 alias tfa 'tofu apply'
+
+# Infrastructure - Terragrunt
 alias tg 'terragrunt'
 alias tga 'terragrunt run-all apply'
 alias tgp 'terragrunt run-all plan'
+alias tgi 'terragrunt run-all init'
+
+# Cloud CLIs (az and gcloud are already the correct command names)
 
 # Development
 alias vim 'nvim'
@@ -87,17 +87,11 @@ alias dc 'docker compose'
 alias p 'podman'
 alias pc 'podman-compose'
 
-# Cloud
-alias gcloud 'gcloud'
-alias gcl 'gcloud'
-
 # Databases
-alias mongo 'mongosh'
 alias pg 'pgcli'
 
 # Misc
 alias http 'httpie'
-alias bw 'bw'
 alias h 'http'
 alias please 'sudo'
 
@@ -120,11 +114,6 @@ if type -q argocd
     argocd completion fish | source
 end
 
-# kargo completion
-if type -q kargo
-    kargo completion fish 2>/dev/null | source
-end
-
 # opentofu completion
 if type -q tofu
     tofu -install-autocomplete 2>/dev/null
@@ -135,18 +124,25 @@ if type -q gh
     gh completion -s fish | source
 end
 
-# gcloud completion
-if type -q gcloud
-    # gcloud fish completion is typically in the SDK
-    if test -f /usr/share/google-cloud-sdk/completion.fish.inc
-        source /usr/share/google-cloud-sdk/completion.fish.inc
+# Claude Code completion (only if logged in)
+if type -q claude
+    set -l claude_comp (claude completion fish 2>/dev/null)
+    if test $status -eq 0; and not string match -q '*Invalid*' -- "$claude_comp"
+        echo $claude_comp | source
     end
 end
 
-# Claude Code completion
-if type -q claude
-    claude completion fish 2>/dev/null | source
+# terragrunt completion
+if type -q terragrunt
+    terragrunt --install-autocomplete 2>/dev/null
 end
+
+# azure-cli completion
+if type -q az
+    az completion --shell fish 2>/dev/null | source
+end
+
+# gcloud completion (handled by google-cloud-cli package)
 
 # ----------------------------
 # Environment

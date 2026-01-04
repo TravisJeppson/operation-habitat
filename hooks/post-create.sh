@@ -8,34 +8,124 @@ echo "🔧 Running post-create hooks..."
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Install devbox global packages first (needed for npm)
-echo "Installing devbox packages..."
-if [[ -f "$SCRIPT_DIR/devbox.json" ]]; then
+# ----------------------------
+# Package Installation
+# ----------------------------
+
+# Official repo packages (pacman)
+PACMAN_PACKAGES=(
+    # Shell & Terminal
+    fish
+    tmux
+    starship
+    zoxide
+    direnv
+    fzf
+
+    # Editors & Tools
+    neovim
+    git
+    git-delta
+    ripgrep
+    fd
+    bat
+    eza
+    jq
+    httpie
+
+    # Security
+    age
+    sops
+
+    # Development (using LTS for compatibility with cloud CLIs)
+    nodejs-lts-jod
+    npm
+
+    # Kubernetes (official)
+    kubectl
+)
+
+# AUR packages (yay)
+AUR_PACKAGES=(
+    # Kubernetes & Cloud
+    kubectx
+    helm
+    kustomize
+    k9s
+    argocd
+    stern
+    kubeconform
+    krew
+
+    # Infrastructure
+    opentofu
+    terragrunt
+
+    # Cloud CLIs
+    azure-cli
+    google-cloud-cli
+
+    # Git & GitHub
+    github-cli
+    lazygit
+
+    # Data tools
+    yq
+    pgcli
+
+    # Container tools
+    dive
+    trivy
+)
+
+echo "Installing packages from official repos..."
+sudo pacman -Sy --noconfirm --needed "${PACMAN_PACKAGES[@]}" || true
+
+# ----------------------------
+# Install yay if not present (needed for AUR)
+# ----------------------------
+
+if ! command -v yay &> /dev/null; then
+    echo "Installing yay..."
+    sudo pacman -S --noconfirm --needed git base-devel
+    TEMP_DIR=$(mktemp -d)
+    git clone https://aur.archlinux.org/yay-bin.git "$TEMP_DIR/yay-bin"
+    cd "$TEMP_DIR/yay-bin"
+    makepkg -si --noconfirm
     cd "$SCRIPT_DIR"
-    devbox install
-    
-    # Add packages globally
-    PACKAGES=$(jq -r '.packages[]' devbox.json | tr '\n' ' ')
-    devbox global add $PACKAGES
+    rm -rf "$TEMP_DIR"
+    echo "  → yay installed"
 fi
 
-# Source devbox environment for npm access
-eval "$(devbox global shellenv)"
+# Install AUR packages
+echo "Installing packages from AUR..."
+if command -v yay &> /dev/null; then
+    yay -S --noconfirm --needed "${AUR_PACKAGES[@]}" || true
+else
+    echo "  ⚠ yay installation failed, skipping AUR packages"
+fi
 
-# Install Claude Code
+# ----------------------------
+# Claude Code Installation
+# ----------------------------
+
 echo "Installing Claude Code..."
 if command -v npm &> /dev/null; then
-    npm install -g @anthropic-ai/claude-code
+    sudo npm install -g @anthropic-ai/claude-code
     echo "  → Claude Code installed"
 else
     echo "  ⚠ npm not found, skipping Claude Code installation"
 fi
 
+# ----------------------------
+# Shell Configuration
+# ----------------------------
+
 # Set fish as default shell for distrobox
 FISH_PATH=$(which fish 2>/dev/null || echo "/usr/bin/fish")
 if [[ -x "$FISH_PATH" ]]; then
     echo "Configuring fish as default shell..."
-    
+
     # Add fish exec to bashrc for distrobox enter
     if [[ -f ~/.bashrc ]]; then
         if ! grep -q "exec fish" ~/.bashrc; then
@@ -52,51 +142,62 @@ EOF
     fi
 fi
 
-# Link configurations
+# ----------------------------
+# Configuration Links
+# ----------------------------
+
 echo "Linking configurations..."
 
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
+mkdir -p "$CONFIG_DIR"
+
 # Starship config
-STARSHIP_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
-mkdir -p "$STARSHIP_CONFIG_DIR"
-if [[ -f "$SCRIPT_DIR/config/starship.toml" ]] && [[ ! -f "$STARSHIP_CONFIG_DIR/starship.toml" ]]; then
-    ln -sf "$SCRIPT_DIR/config/starship.toml" "$STARSHIP_CONFIG_DIR/starship.toml"
+if [[ -f "$SCRIPT_DIR/config/starship.toml" ]] && [[ ! -f "$CONFIG_DIR/starship.toml" ]]; then
+    ln -sf "$SCRIPT_DIR/config/starship.toml" "$CONFIG_DIR/starship.toml"
     echo "  → Linked starship.toml"
 fi
 
 # Fish config
-FISH_CONFIG_DIR="$STARSHIP_CONFIG_DIR/fish/conf.d"
+FISH_CONFIG_DIR="$CONFIG_DIR/fish/conf.d"
 mkdir -p "$FISH_CONFIG_DIR"
-if [[ -f "$SCRIPT_DIR/config/fish/devbox.fish" ]]; then
-    ln -sf "$SCRIPT_DIR/config/fish/devbox.fish" "$FISH_CONFIG_DIR/devbox.fish"
-    echo "  → Linked fish devbox config"
+if [[ -f "$SCRIPT_DIR/config/fish/devenv.fish" ]]; then
+    ln -sf "$SCRIPT_DIR/config/fish/devenv.fish" "$FISH_CONFIG_DIR/devenv.fish"
+    echo "  → Linked fish config"
 fi
 
 # Tmux config
-TMUX_CONFIG_DIR="$STARSHIP_CONFIG_DIR/tmux"
-mkdir -p "$TMUX_CONFIG_DIR"
-if [[ -f "$SCRIPT_DIR/config/tmux.conf" ]] && [[ ! -f "$TMUX_CONFIG_DIR/tmux.conf" ]]; then
-    ln -sf "$SCRIPT_DIR/config/tmux.conf" "$TMUX_CONFIG_DIR/tmux.conf"
-    echo "  → Linked tmux.conf"
-    # Also link to traditional location for compatibility
+if [[ -f "$SCRIPT_DIR/config/tmux.conf" ]]; then
+    if [[ ! -f "$CONFIG_DIR/tmux/tmux.conf" ]]; then
+        mkdir -p "$CONFIG_DIR/tmux"
+        ln -sf "$SCRIPT_DIR/config/tmux.conf" "$CONFIG_DIR/tmux/tmux.conf"
+    fi
     if [[ ! -f ~/.tmux.conf ]]; then
         ln -sf "$SCRIPT_DIR/config/tmux.conf" ~/.tmux.conf
     fi
+    echo "  → Linked tmux.conf"
 fi
 
-# LazyVim - if not already configured, suggest setup
-NVIM_CONFIG_DIR="$STARSHIP_CONFIG_DIR/nvim"
-if [[ ! -d "$NVIM_CONFIG_DIR" ]]; then
+# LazyVim suggestion
+if [[ ! -d "$CONFIG_DIR/nvim" ]]; then
     echo ""
     echo "📝 Neovim config not found. To install LazyVim:"
     echo "   git clone https://github.com/LazyVim/starter ~/.config/nvim"
     echo "   rm -rf ~/.config/nvim/.git"
 fi
 
+# ----------------------------
+# Done
+# ----------------------------
+
 echo ""
 echo "✅ Post-create hooks complete!"
 echo ""
 echo "Installed tools:"
-echo "  → Claude Code: $(claude --version 2>/dev/null || echo 'run claude --help to verify')"
+command -v claude &>/dev/null && echo "  → Claude Code: $(claude --version 2>/dev/null || echo 'installed')"
+command -v starship &>/dev/null && echo "  → Starship prompt"
+command -v kubectl &>/dev/null && echo "  → kubectl"
+command -v k9s &>/dev/null && echo "  → k9s"
+command -v nvim &>/dev/null && echo "  → Neovim"
 echo ""
 echo "To enter the environment:"
 echo "   distrobox enter devenv"
