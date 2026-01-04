@@ -21,9 +21,9 @@ end
 # ----------------------------
 
 # Kubernetes
-alias k 'kubectl'
-alias kx 'kubectx'
-alias kn 'kubens'
+alias k kubectl
+alias kx kubectx
+alias kn kubens
 alias kgp 'kubectl get pods'
 alias kgs 'kubectl get svc'
 alias kgd 'kubectl get deployments'
@@ -34,18 +34,18 @@ alias klog 'kubectl logs -f'
 alias kexec 'kubectl exec -it'
 
 # GitOps
-alias argo 'argocd'
+alias argo argocd
 alias argoapp 'argocd app'
 alias argosync 'argocd app sync'
 
 # Infrastructure - OpenTofu
-alias tf 'tofu'
+alias tf tofu
 alias tfi 'tofu init'
 alias tfp 'tofu plan'
 alias tfa 'tofu apply'
 
 # Infrastructure - Terragrunt
-alias tg 'terragrunt'
+alias tg terragrunt
 alias tga 'terragrunt run-all apply'
 alias tgp 'terragrunt run-all plan'
 alias tgi 'terragrunt run-all init'
@@ -53,13 +53,13 @@ alias tgi 'terragrunt run-all init'
 # Cloud CLIs (az and gcloud are already the correct command names)
 
 # Development
-alias vim 'nvim'
-alias v 'nvim'
-alias lg 'lazygit'
-alias cc 'claude'
+alias vim nvim
+alias v nvim
+alias lg lazygit
+alias cc claude
 
 # File navigation
-alias ls 'eza'
+alias ls eza
 alias ll 'eza -la --git'
 alias la 'eza -a'
 alias lt 'eza --tree --level=2'
@@ -67,10 +67,10 @@ alias cat 'bat --paging=never'
 
 # Search
 alias rg 'rg --smart-case'
-alias f 'fd'
+alias f fd
 
 # Git
-alias g 'git'
+alias g git
 alias gs 'git status'
 alias ga 'git add'
 alias gc 'git commit'
@@ -82,18 +82,18 @@ alias gd 'git diff'
 alias glog 'git log --oneline --graph'
 
 # Docker/Podman
-alias d 'docker'
+alias d docker
 alias dc 'docker compose'
-alias p 'podman'
-alias pc 'podman-compose'
+alias p podman
+alias pc podman-compose
 
 # Databases
-alias pg 'pgcli'
+alias pg pgcli
 
 # Misc
-alias http 'httpie'
-alias h 'http'
-alias please 'sudo'
+alias http httpie
+alias h http
+alias please sudo
 
 # ----------------------------
 # Completions
@@ -122,14 +122,6 @@ end
 # gh completion
 if type -q gh
     gh completion -s fish | source
-end
-
-# Claude Code completion (only if logged in)
-if type -q claude
-    set -l claude_comp (claude completion fish 2>/dev/null)
-    if test $status -eq 0; and not string match -q '*Invalid*' -- "$claude_comp"
-        echo $claude_comp | source
-    end
 end
 
 # terragrunt completion
